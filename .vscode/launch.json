@@ -1,0 +1,45 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug executable 'pong-tetra-rust'",
+      "cargo": {
+        "args": [
+          "build",
+          "--bin=pong-tetra-rust",
+          "--package=pong-tetra-rust"
+        ],
+        "filter": {
+          "name": "pong-tetra-rust",
+          "kind": "bin"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug unit tests in executable 'pong-tetra-rust'",
+      "cargo": {
+        "args": [
+          "test",
+          "--no-run",
+          "--bin=pong-tetra-rust",
+          "--package=pong-tetra-rust"
+        ],
+        "filter": {
+          "name": "pong-tetra-rust",
+          "kind": "bin"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}
