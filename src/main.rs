@@ -1,3 +1,4 @@
+use tetra::graphics::text::{Font, Text};
 use tetra::graphics::{self, Color, Rectangle, Texture};
 use tetra::input::{self, Key};
 use tetra::math::Vec2;
@@ -68,6 +69,7 @@ struct GameState {
     player1: Entity,
     player2: Entity,
     ball: Entity,
+    winner: String,
 }
 
 impl GameState {
@@ -95,6 +97,7 @@ impl GameState {
             player1: Entity::new(player1_texture, player1_position),
             player2: Entity::new(player2_texture, player2_position),
             ball: Entity::with_velocity(ball_texture, ball_position, ball_velocity),
+            winner: String::new(),
         })
     }
 }
@@ -157,11 +160,33 @@ impl State for GameState {
         }
 
         if self.ball.position.x > WINDOW_WIDTH {
-            window::quit(ctx);
-            println!("Player 1 wins!");
+            self.winner = "Player 1".to_string();
         } else if self.ball.position.x < 0.0 {
-            window::quit(ctx);
-            println!("Player 2 wins!");
+            self.winner = "Player 2".to_string();
+        }
+
+        if !self.winner.is_empty() {
+            self.winner
+                .push_str(" wins!\nPress Enter to Restart or Esc to quit game");
+            let mut winner_text = Text::new(
+                self.winner.to_string(),
+                Font::vector(ctx, "./fonts/wheaton.otf", 32.0)?,
+            );
+            let text_position = Vec2::new(
+                get_width(ctx) as f32 / 2.0 - 400.0,
+                get_height(ctx) as f32 / 2.0 - 100.0,
+            );
+
+            winner_text.draw(ctx, text_position);
+
+            if input::is_key_down(ctx, Key::Enter) {
+                self.winner = String::new();
+                self.ball.position = Vec2::new(
+                    get_width(ctx) as f32 / 2.0 - self.ball.texture.width() as f32 / 2.0,
+                    get_height(ctx) as f32 / 2.0 - self.ball.texture.height() as f32 / 2.0,
+                );
+                self.ball.velocity = Vec2::new(-BALL_SPEED, 0.0);
+            }
         }
 
         Ok(())
